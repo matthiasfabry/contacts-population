@@ -1,0 +1,3 @@
+#!/bin/zsh
+
+./../../../../../../../execs/re $1 2>err.txt 1>term.txt

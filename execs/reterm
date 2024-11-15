@@ -1,0 +1,3 @@
+#!/bin/zsh
+
+./../../../../../../../execs/re $1 | tee term.txt

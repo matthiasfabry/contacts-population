@@ -1,0 +1,31 @@
+&star_job
+   read_extra_star_job_inlist1 = .true.
+   extra_star_job_inlist1_name = '../../../../../../../common_single_rotation/inlist_star'
+   save_model_when_terminate = .true.
+   save_model_filename = 'final1.mod'
+/ ! end of star_job namelist
+
+&eos
+   read_extra_eos_inlist1 = .true.
+   extra_eos_inlist1_name = '../../../../../../../common_single_rotation/inlist_star'
+/ ! end of eos namelist
+
+&kap
+   read_extra_kap_inlist1 = .true.
+   extra_kap_inlist1_name = '../../../../../../../common_single_rotation/inlist_star'
+/ ! end of kap namelist
+
+&controls
+   read_extra_controls_inlist1 = .true.
+   extra_controls_inlist1_name = '../../../../../../../common_single_rotation/inlist_star'
+
+   ! output options
+   log_directory = 'LOGS1'
+/ ! end of controls namelist
+
+&pgstar
+   read_extra_pgstar_inlist1 = .true.
+   extra_pgstar_inlist1_name = '../../../../../../../common_single_rotation/inlist_pgstar'
+   ! file output
+   Grid2_file_prefix = 'grid_1_'
+/

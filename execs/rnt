@@ -1,0 +1,3 @@
+#!/bin/bash
+
+./../../../../../../../execs/rn 2>err.txt 1>term.txt

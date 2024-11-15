@@ -1,0 +1,23 @@
+#!/bin/zsh
+
+if [ -d "./LOGS1/" ]; then
+  rm -r "./LOGS1"
+fi
+if [ -d "./LOGS2/" ]; then
+  rm -r "./LOGS2"
+fi
+if [ -d "./LOGS/" ]; then
+  rm -r "./LOGS"
+fi
+
+if [ -d "./photos" ]; then
+  rm -r "./photos"
+fi
+
+if [ -f "binary_history.data" ]; then
+  rm "binary_history.data"
+fi
+
+if [ -f "term.txt" ]; then
+  rm "term.txt"
+fi

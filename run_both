@@ -1,0 +1,53 @@
+#!/bin/bash
+
+function start_or_restart {
+
+  if [ -d "$1/photos" ] && [ "$(ls -A "$1/photos")" ]; then
+    echo "has photos! restarting"
+    ./../../../../../../execs/ret
+  else
+    echo "running from start" "$PWD"
+    ./../../../../../../execs/rnrt
+  fi
+}
+
+cd "ET" || exit
+if ! [ -f "logsET.tar.gz" ] ; then
+  ./../../../../../../execs/clean
+  ./../../../../../../execs/mk
+  start_or_restart "$PWD"
+  tar -cvzf "logsET.tar.gz" "LOGS1/history.data" "LOGS2/history.data" "term.txt"
+  rm "term.txt"
+  rm "LOGS1/history.data"
+  rm "LOGS2/history.data"
+  ./../../../../../../execs/clean
+else
+  echo "$PWD already has logsET.tar.gz, skipping run"
+fi
+
+if [ -f "$PWD/had_no_ET.txt" ]; then
+  run_NO_ET=false
+  echo "this run had no ET; skipping the no ET run"
+else
+  run_NO_ET=true
+fi
+
+cd "../no_ET" || exit
+if [ "$run_NO_ET" = true ] ; then
+  if ! [ -f "logsnoET.tar.gz" ] ; then
+    ./../../../../../../execs/clean
+    ./../../../../../../execs/mk
+    start_or_restart "$PWD"
+    tar -cvzf "logsnoET.tar.gz" "LOGS1/history.data" "LOGS2/history.data" "term.txt"
+    rm "term.txt"
+    rm "LOGS1/history.data"
+    rm "LOGS2/history.data"
+    ./../../../../../../execs/clean
+  else
+    echo "$PWD already has logsnoET.tar.gz, skipping run"
+  fi
+else
+  touch same_as_ET.txt
+fi
+cd ".."
+echo "done here: $PWD"
