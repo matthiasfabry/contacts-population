@@ -37,7 +37,7 @@ kap_CO_prefix = 'a09_co'
 
 &controls
 !!!! initial models !!!!
-zams_filename = 'zams_0.0142_y0.2703.data'
+zams_filename = 'low_mass_0.0142_y0.2703.data'
 initial_z = 0.0142d0
 initial_y = 0.2703d0
 
