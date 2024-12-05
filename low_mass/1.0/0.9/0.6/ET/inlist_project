@@ -1,0 +1,93 @@
+&binary_job
+
+inlist_names(1) = 'inlist1'
+inlist_names(2) = 'inlist2'
+
+evolve_both_stars = .true.
+change_initial_ignore_rlof_flag = .true.
+new_ignore_rlof_flag = .true.
+
+pgbinary_flag = .true.
+
+binary_history_columns_file = '../../../../../../common_files/binary_history_columns.list'
+/ ! end of binary_job namelist
+
+&binary_controls
+
+! don't terminate if the accretor overflows
+accretor_overflow_terminate = 1d99
+terminate_if_initial_overflow = .false.
+terminate_if_L2_overflow = .true.
+
+
+do_jdot_mb = .true.
+include_accretor_mb = .true.
+use_other_jdot_mb = .true.  ! saturated braking
+magnetic_braking_gamma = 4.0d0
+jdot_mb_min_qconv_env = 1d-6
+jdot_mb_max_qconv_env = 0.90d0
+jdot_mb_max_qconv_core = 1d-1
+jdot_mb_qlim_for_check_rad_core = 1d-3
+jdot_mb_qlim_for_check_conv_env = 0.999d0
+
+! using rotation
+do_jdot_ls = .true.
+do_j_accretion = .true.
+do_jdot_missing_wind = .true.
+
+! tidal sync
+do_tidal_sync = .true.
+sync_mode_1 = "Uniform"
+sync_type_1 = "Orb_period"
+Ftid_1 = 1
+do_initial_orbit_sync_1 = .true.
+sync_mode_2 = "Uniform"
+sync_type_2 = "Orb_period"
+Ftid_2 = 1
+do_initial_orbit_sync_2 = .true.
+
+! other hooks
+use_other_extra_jdot = .true.  ! for period relaxation if zams overflow
+use_other_implicit_function_to_solve = .true.  ! custom contact condition
+
+! timestep controls
+fr = 5d-2
+fr_hard = 1d-1
+fr_limit = 1d-2
+fr_dt_limit = 5d1
+fm = -1d0  ! turn off since rejuvinating accretors can change env mass quickly; we don't want to resolve this
+fdm = 1d-3
+fdm_hard = 5d-3
+fj = 5d-3
+fj_hard = 1d-2
+dt_softening_factor = 0.3
+
+! implicit mdot solver settings
+mdot_scheme = 'contact'
+report_rlo_solver_progress = .true.
+max_tries_to_achieve = 30
+max_implicit_abs_mdot = 1d-2  ! max mdot; if reached, we terminate simulation
+implicit_scheme_tolerance = 1d-4
+min_change_factor = 1.005d0
+initial_change_factor = 1.5d0
+change_factor_fraction = 0.9d0
+implicit_lambda = 0.3d0
+implicit_scheme_tiny_factor = 1d-6
+min_mdot_for_implicit = 1d-99
+starting_mdot = 1d-11
+roche_min_mdot = 1d-12  ! any MT computed to be lower than this is put to 0 and detachment
+num_tries_for_increase_change_factor = 3
+change_factor_increase = 1.3d0
+
+! misc mdot controls
+do_wind_mass_transfer_1 = .true.
+do_wind_mass_transfer_2 = .true.
+
+! output settings
+photo_interval = 100
+history_interval = 1
+terminal_interval = 1
+write_header_frequency = 25
+history_dbl_format = '(1pes32.5e3, 1x)'  ! only 5 digits
+
+/ ! end of binary_controls namelist

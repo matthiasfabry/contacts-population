@@ -1,0 +1,5 @@
+&binary_controls
+m1 = 30.0d0
+m2 = 27.0d0
+initial_period_in_days = 1.52d0
+/

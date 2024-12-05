@@ -1,3 +1,13 @@
 pngs/
 **.DS_store
 .idea/
+profile*
+photos/
+binary
+*.o
+*.png
+pgstar.dat
+**/make/**.mod
+**/make/**.smod
+term.txt
+.restart

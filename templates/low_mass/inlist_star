@@ -1,0 +1,196 @@
+&star_job
+! see star/defaults/star_job.defaults
+pgstar_flag = .false.  ! we use pgbinary
+
+new_rotation_flag = .true.
+change_initial_rotation_flag = .true.
+set_initial_surface_rotation_v = .true.
+! this is just a random number, tidal sync takes care of it
+new_surface_rotation_v = 50
+num_steps_to_relax_rotation = 25
+
+set_initial_dt = .true.
+years_for_initial_dt = 1d2
+
+new_w_div_wc_flag = .true.  ! implicit fp/ft
+change_initial_w_div_wc_flag = .true.
+
+history_columns_file = '../../../../../../common_files/history_columns.list'
+profile_columns_file = '../../../../../../common_files/profile_columns.list'
+/ ! end of star_job namelist
+
+&eos
+! eos options
+! see eos/defaults/eos.defaults
+use_FreeEOS = .false.
+
+/ ! end of eos namelist
+
+&kap
+! kap options
+! see kap/defaults/kap.defaults
+Zbase = 0.0142d0
+kap_file_prefix = 'a09'
+kap_CO_prefix = 'a09_co'
+
+/ ! end of kap namelist
+
+&controls
+!!!! initial models !!!!
+zams_filename = 'zams_0.0142_y0.2703.data'
+initial_z = 0.0142d0
+initial_y = 0.2703d0
+
+!!!! wind !!!!
+use_other_wind = .true.  ! Brott wind
+
+! use implicit wind close to critical
+surf_avg_tau_min = 0
+surf_avg_tau = 10
+max_mdot_redo_cnt = 100
+min_years_dt_for_redo_mdot = 0
+surf_omega_div_omega_crit_limit = 0.97d0
+surf_omega_div_omega_crit_tol = 0.05d0
+mdot_revise_factor = 1.3d0
+implicit_mdot_boost = 0.1d0
+
+!!!! rotation !!!!
+premix_omega = .true.
+do_adjust_J_lost = .true.
+min_J_div_delta_J = 1d0  ! LS coupling is strong for close binaries
+use_other_eval_fp_ft = .true.
+use_other_eval_i_rot = .true.
+use_other_surface_PT = .true.
+
+!!!! mlt options !!!!
+MLT_option = 'Cox'
+use_ledoux_criterion = .true.
+num_cells_for_smooth_gradL_composition_term = 2
+mixing_length_alpha = 1.5d0
+alpha_semiconvection = 1d0
+thermohaline_coeff = 1d0
+! rotational mixing
+am_nu_ST_factor = 1.0
+D_visc_factor = 0.0
+am_nu_SH_factor = 0.0
+D_ST_factor = 0.0
+D_SH_factor = 0.0
+D_GSF_factor = 1.0
+D_ES_factor = 1.0
+D_SSI_factor = 1.0
+D_DSI_factor = 1.0
+am_D_mix_factor = 0.0333333d0
+am_gradmu_factor = 0.1d0
+
+! tiny bit of overshoot everywhere else
+overshoot_scheme(2) = 'exponential'
+overshoot_zone_type(2) = 'any'
+overshoot_zone_loc(2) = 'any'
+overshoot_bdy_loc(2) = 'any'
+overshoot_f(2) = 0.01
+overshoot_f0(2) = 0.005
+! allow superadiabiticy to boost radiative energy transport
+use_superad_reduction = .true.
+! eliminate small regions
+min_convective_gap = 0.01
+min_semiconvection_gap = 0.006
+min_thermohaline_gap = 0.005
+
+!!!! meshing controls !!!!
+! spacial resolution
+mesh_delta_coeff = 1d0 ! only scale this for convergence tests
+max_dq = 5d-3
+min_dq_for_xa = 1d-4
+mesh_Pgas_div_P_exponent = 0.2d0
+max_allowed_nz = 5000
+restore_mesh_on_retry = .true.
+num_steps_to_hold_mesh_after_retry = 2
+! Fixing the position of the Lagrangian region of the mesh helps
+! convergence near the Eddington limit
+max_logT_for_k_below_const_q = 100
+max_q_for_k_below_const_q = 0.98
+min_q_for_k_below_const_q = 0.98
+max_logT_for_k_const_mass = 100
+max_q_for_k_const_mass = 0.98
+min_q_for_k_const_mass = 0.98
+
+!!!! timestep controls !!!!
+time_delta_coeff = 1d0 ! only scale this for convergence tests
+varcontrol_target = 1d-1 ! this can artificially stall timestep for inflated envelope, rely on the rest of controls
+min_timestep_limit = 1d0  ! seconds
+min_timestep_factor = 0.8d0  ! next dt cannot be lower than this factor
+max_timestep_factor = 1.35d0
+max_timestep_factor_at_high_T = 1.2d0
+min_logT_for_max_timestep_factor_at_high_T = 8d0
+timestep_factor_for_retries = 0.5d0  ! retry timestep factor
+! mdot limit
+delta_lg_star_mass_limit = -1  ! control with b_deltam, so fdm
+delta_lg_star_mass_hard_limit = -1
+! control central abundance changes
+delta_XH_cntr_limit = 2.5d-3
+delta_XHe_cntr_limit = 2.5d-3
+delta_XC_cntr_limit = 2.5d-3
+! J_q limits
+adjust_J_q_limit = -1
+adjust_J_q_hard_limit = -1
+! solver timestep limit
+gold_solver_iters_timestep_limit = 30
+retry_hold = 2
+never_skip_hard_limits = .true.
+! HR limits
+delta_HR_limit = 1d-2
+delta_lgTeff_limit = 5d-3
+delta_lgL_limit = 5d-2
+
+!!!! solver controls !!!!
+! most adjustements are to improve performance and reliability during MT
+!report_solver_progress = .true.
+report_ierr = .true.
+! tries/redo settings
+solver_max_tries_before_reject = 30
+max_tries_for_retry = 40
+max_tries_after_5_retries = 40
+max_tries_after_10_retries = 40
+max_tries_after_20_retries = 40
+redo_limit = -1  ! allow for any amount of redos for impicit mdot
+! corr coeff settigs
+solver_itermin_until_reduce_min_corr_coeff = 15
+tiny_corr_coeff_limit = 1000
+corr_coeff_limit = 2d-2
+! gold settings
+use_gold_tolerances = .true.
+use_gold2_tolerances = .false.
+gold_tol_residual_norm1 = 1d-9  ! use tier 2 tols as tier 1
+gold_tol_max_residual1 = 1d-6
+gold_iter_for_resid_tol2 = 4
+gold_tol_residual_norm2 = 1d-7  ! tier 3 tols as tier 2
+gold_tol_max_residual2 = 1d-4
+gold_iter_for_resid_tol3 = 8
+gold_tol_residual_norm3 = 1d-6 ! relaxed tier 3 tols
+gold_tol_max_residual3 = 1d-3
+! correction/tol settings
+tol_max_correction = 1d-2
+tol_correction_norm = 1d-3
+!scale_max_correction = 2d-2
+! ignores
+ignore_species_in_max_correction = .true.
+ignore_too_large_correction = .true.
+ignore_min_corr_coeff_for_scale_max_correction = .true.
+! limit jumps
+max_corr_jump_limit = 1d10
+corr_norm_jump_limit = 1d10
+max_resid_jump_limit = 1d10
+resid_norm_jump_limit = 1d10
+
+!!!! output options !!!!
+profile_interval = 40  ! final profile gets saved automatically
+history_interval = 1
+terminal_interval = 1
+write_header_frequency = 25
+star_history_dbl_format = '(1pes32.5e3, 1x)'  ! only 5 digits
+profile_dbl_format = '(1pes32.5e3, 1x)'
+
+!!!! termination !!!!
+max_model_number = 10000
+max_number_retries = 1000
+/
