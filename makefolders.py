@@ -23,11 +23,8 @@ def make_pair(mm1, pp, qq, src, ddest=''):
     if len(ddest) > 0 and ddest[-1] != '/':
         ddest += '/'
 
-    template = src.rsplit('/', maxsplit=1)[1]
-    if template == '':
-        template = src
     for option in ['ET', 'no_ET']:
-        path = ddest + template + '/' + mm1 + '/' + pp + "/" + qq + '/' + option
+        path = ddest + '/' + mm1 + '/' + pp + "/" + qq + '/' + option
         sh.copytree(src, path, dirs_exist_ok=True, ignore=no_ds)
         # create inlist with variable parameters
         new_inlist = open(path + '/inlist_extra', 'w')
@@ -47,7 +44,7 @@ def make_pair(mm1, pp, qq, src, ddest=''):
         new_inlist.write("/\n")
         new_inlist.close()
 
-    path = ddest + template + '/' + mm1 + '/' + pp + '/' + qq
+    path = ddest + '/' + mm1 + '/' + pp + '/' + qq
     sh.copy('run_both', path)
     os.chmod(path + '/run_both', 0o777)
     # path = ddest + template + '/' + mm1 + '/' + pp

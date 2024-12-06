@@ -1,6 +1,6 @@
 import sys
 
-import make_et_folders as mf
+import makefolders as mf
 import numpy as np
 import os
 import shutil
@@ -51,4 +51,4 @@ print('making', len(m1s) * len(qs) * len(ps), 'cases')
 for m1 in m1s:
     for q in qs:
         for p in ps:
-            mf.make_pair(str(m1), str(q), str(p), template, dest)
+            mf.make_pair(str(m1), str(p), str(q), template, dest)
