@@ -37,7 +37,7 @@ kap_CO_prefix = 'a09_co'
 
 &controls
 !!!! initial models !!!!
-zams_filename = 'low_mass_0.0142_y0.2703.data'
+zams_filename = 'zams_0.0142_y0.2703.data'
 initial_z = 0.0142d0
 initial_y = 0.2703d0
 
@@ -171,7 +171,7 @@ gold_tol_max_residual3 = 1d-3
 ! correction/tol settings
 tol_max_correction = 1d-2
 tol_correction_norm = 1d-3
-scale_max_correction = 2d-2
+!scale_max_correction = 2d-2
 ! ignores
 ignore_species_in_max_correction = .true.
 ignore_too_large_correction = .true.
