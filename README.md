@@ -17,12 +17,10 @@ The files fall, broadly, in two categories.
 ### Category 1
 * `zams_models/` contains the non-rotating ZAMS models that the grid starts from. Copy the contents of this folder into your MESA installation folder in `data/star_data/zams_models`
 * `make_grid.py` uses `makefolders.py` to build the directory structure in which to run the MESA models that use energy transfer/no energy transfer.
-It copies from `templates/grid`, and uses `run_both`. The `common_files`, `execs` and `data_tables` should be made available.
-If you put your `grid` folder at the same level, you should not have to change anything.
-`run_grid.slurm` is there for your convenience to run the models easily on a cluster.
-Be mindful with path names though, as they may be different for your system.
+It copies from `templates/grid`, and uses `run_both`.
+If you put your new `grid` folder at the same level, you should not have to change any paths in any file.
+`run_grid.slurm` is there for your convenience to run the models easily on a cluster. Issuing `sbatch -a 1-n run_grid.slurm` will start `n` parallel jobs, running the models of the grid. You will have to change pathnames here for your system.
 * `make_single_rot_grid.py` uses `makefolders.py` to build the directories in which the single-rotating models will be run.
-`common_single_rotation`, `execs` and `data_tables` should be available.
 `run_single_rot_grid.slurm` is used to run the grid calculations on a cluster (mind path differences for your system).
 
 To make a grid using the `grid` mesa template, issue
@@ -34,7 +32,10 @@ To run a single model, `cd` into one, _e.g._ `cd grid_folder/28.0/1.26/0.775/ET/
 (cf. the commands in `run_both`). The reason for this pedantic executable calling is to avoid having lots of duplicate files in the directory tree, to save file count when using cluster resources.
 Same for the `inlists` and other files in the `common_files/` directory.
 
+* the full grid of models (`grid.tar.gz`) is available on Zenodo (doi:10.5281/zenodo.14289889), if you got this repository from there, it should be included. This file is ~30GB and highly compressed, so it might take a while to uncompress depending on your system resources (you might want to consider `pigz`). The uncompressed size is **~250GB**.
+* `cases/` contains the models needed to reproduce figures 1-3, they are copied from the `grid/` and included here so you do not have to download the full grid tar file.
 * `appendices/` contains the models that were computed for Appendices B and C, and come with their full history information included.
+* `data_tables/` contains the data required to use the tidal deformation ocrrections, computed in Fabry et al. 2022 (A&A,Vol.661,A123)
 
 ### Category 2
 #### Helper files
